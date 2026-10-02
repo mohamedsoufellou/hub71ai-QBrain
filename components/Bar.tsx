@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FolderOpen, Languages, RotateCcw } from "lucide-react";
 import { useFile } from "@/lib/store";
 import { Mark } from "./Mark";
@@ -32,12 +33,21 @@ export function Bar() {
 
   return (
     <header className="hal-nav">
-      <button type="button" className="hal-nav__brand wu-brand" disabled={responding} aria-label={ar ? "وصول، جميع الخدمات" : "Wusool, all services"} title={ar ? "وصول" : "Wusool"} onClick={() => started && act({ a: "topic", topic: "menu" }, ar ? "جميع الخدمات" : "All services")}>
+      <Link
+        href="/"
+        className="hal-nav__brand wu-brand"
+        aria-label={ar ? "وصول، الصفحة الرئيسية" : "Wusool, home"}
+        title={ar ? "وصول" : "Wusool"}
+        onClick={(event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          if (started) reset();
+        }}
+      >
         <Mark />
         <span className="wu-brand__english" lang="en">wusool</span>
         <span className="wu-brand__divider" aria-hidden="true" />
         <span className="wu-brand__arabic" lang="ar" dir="rtl">وصول</span>
-      </button>
+      </Link>
       <nav className="wu-service-nav" aria-label={ar ? "الخدمات" : "Services"}>
         {serviceLinks.map(({ topic, en, ar: labelAr }) => (
           <button key={topic} type="button" className="wu-nav-icon wu-service-link" disabled={responding} aria-label={ar ? labelAr : en} title={ar ? labelAr : en} aria-current={active === topic ? "true" : undefined} onClick={() => act({ a: "topic", topic }, ar ? labelAr : en)}>
